@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.AdminDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Admin">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        username,
+        password,
+        type
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getAdminList" parameterType="Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from admin
+    where 1=1 and type = '02'
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id) from admin
+     where 1=1 and type = '02'
+  </select>
+
+
+  <!--添加-->
+  <insert id="addAdmin" parameterType="com.mty.cc.po.Admin" keyProperty="id" useGeneratedKeys="true">
+    insert into admin (
+    id,
+    username,
+    password,
+    type
+  )values(
+        #{id},
+        #{username},
+        #{password},
+         #{type}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteAdmin" >
+        delete from admin where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findAdminById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from admin where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateAdmin" parameterType="com.mty.cc.po.Admin">
+    update admin
+    <set>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from admin
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from admin
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="username != null and username != '' ">
+        and username = #{username}
+    </if>
+    <if test="password != null and password != '' ">
+        and password = #{password}
+    </if>
+      <if test="type != null and type != '' ">
+          and type = #{type}
+      </if>
+   </select>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.LeavesDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Leaves">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="day" jdbcType="VARCHAR" property="day" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        uid,
+        day,
+        ptime,
+        status
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getLeavesList" parameterType="Integer" resultType="com.mty.cc.po.Leaves">
+    select
+      l.id,
+      l.uid,
+      l.day,
+      l.ptime,
+      l.status,
+      u.username uname
+    from leaves l left join user u on l.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and l.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(*)
+      from leaves l left join user u on l.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and l.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addLeaves" parameterType="com.mty.cc.po.Leaves" keyProperty="id" useGeneratedKeys="true">
+    insert into leaves (
+    id,
+    uid,
+    day,
+    ptime,
+    status
+  )values(
+        #{id},
+        #{uid},
+        #{day},
+        #{ptime},
+        #{status}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteLeaves" >
+        delete from leaves where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findLeavesById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from leaves where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateLeaves" parameterType="com.mty.cc.po.Leaves">
+    update leaves
+    <set>
+      <if test="uid != null">
+        uid = #{uid},
+      </if>
+      <if test="day != null">
+        day = #{day},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from leaves
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from leaves
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="uid != null and uid != '' ">
+        and uid = #{uid}
+    </if>
+    <if test="day != null and day != '' ">
+        and day = #{day}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+    <if test="status != null and status != '' ">
+        and status = #{status}
+    </if>
+   </select>
+</mapper>

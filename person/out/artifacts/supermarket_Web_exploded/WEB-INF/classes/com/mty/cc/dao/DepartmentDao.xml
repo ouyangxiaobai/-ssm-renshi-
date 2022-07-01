@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.DepartmentDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Department">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="major" jdbcType="VARCHAR" property="major" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        major,
+        remark
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getDepartmentList" parameterType="Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from department
+      where 1=1
+      <if test="name != null and name != '' ">
+          and name like concat('%',#{name},'%')
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id) from department
+      where 1=1
+      <if test="name != null and name != '' ">
+          and name like concat('%',#{name},'%')
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addDepartment" parameterType="com.mty.cc.po.Department" keyProperty="id" useGeneratedKeys="true">
+    insert into department (
+    id,
+    name,
+    major,
+    remark
+  )values(
+        #{id},
+        #{name},
+        #{major},
+        #{remark}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteDepartment" >
+        delete from department where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findDepartmentById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from department where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateDepartment" parameterType="com.mty.cc.po.Department">
+    update department
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="major != null">
+        major = #{major},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from department
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from department
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="name != null and name != '' ">
+        and name = #{name}
+    </if>
+    <if test="major != null and major != '' ">
+        and major = #{major}
+    </if>
+    <if test="remark != null and remark != '' ">
+        and remark = #{remark}
+    </if>
+   </select>
+</mapper>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.UserDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.User">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="realname" jdbcType="VARCHAR" property="realname" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="did" jdbcType="VARCHAR" property="did" />
+        <result column="pid" jdbcType="VARCHAR" property="pid" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        realname,
+        username,
+        password,
+        sex,
+        phone,
+        did,
+        pid
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getUserList" parameterType="Integer" resultType="com.mty.cc.po.User">
+    select
+    u.id,
+    u.realname,
+    u.username,
+    u.password,
+    u.sex,
+    u.phone,
+    u.did,
+    u.pid,
+    d.name dname,
+    p.name pname
+    from user u left join department d on u.did = d.id left join position p on u.pid = p.id
+    where 1=1
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id) from user
+      where 1=1
+      <if test="username != null and username != '' ">
+          and username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addUser" parameterType="com.mty.cc.po.User" keyProperty="id" useGeneratedKeys="true">
+    insert into user (
+    id,
+    realname,
+    username,
+    password,
+    sex,
+    phone,
+    did,
+    pid
+  )values(
+        #{id},
+        #{realname},
+        #{username},
+        #{password},
+        #{sex},
+        #{phone},
+        #{did},
+        #{pid}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteUser" >
+        delete from user where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findUserById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from user where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateUser" parameterType="com.mty.cc.po.User">
+    update user
+    <set>
+      <if test="realname != null">
+        realname = #{realname},
+      </if>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+      <if test="sex != null">
+        sex = #{sex},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="did != null">
+        did = #{did},
+      </if>
+        <if test="pid != null">
+            pid = #{pid},
+        </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="realname != null and realname != '' ">
+        and realname = #{realname}
+    </if>
+    <if test="username != null and username != '' ">
+        and username = #{username}
+    </if>
+    <if test="password != null and password != '' ">
+        and password = #{password}
+    </if>
+    <if test="sex != null and sex != '' ">
+        and sex = #{sex}
+    </if>
+    <if test="phone != null and phone != '' ">
+        and phone = #{phone}
+    </if>
+    <if test="did != null and did != '' ">
+        and did = #{did}
+    </if>
+      <if test="pid != null and pid != '' ">
+          and pid = #{pid}
+      </if>
+   </select>
+</mapper>

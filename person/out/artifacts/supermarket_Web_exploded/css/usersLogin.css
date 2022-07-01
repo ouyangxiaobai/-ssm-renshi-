@@ -1,0 +1,242 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    background: url("../images/bti.jpg")no-repeat;
+    width: 100%;
+    height: 200px;
+}
+
+.body{
+    background: url("../images/23212.jpg");
+}
+
+.panel{
+    width: 350px;
+    height: 470px;
+    position: relative;
+    left: 500px;
+    top: 125px;
+    background-color: #FFFFFF;
+    border: 1px solid #dff0d8;
+}
+
+
+.panel2{
+    width: 350px;
+    height: 525px;
+    position: relative;
+    left: 500px;
+    top: 90px;
+    background-color: #FFFFFF;
+    border: 1px solid #dff0d8;
+}
+
+.panel3{
+    width: 350px;
+    height: 380px;
+    position: relative;
+    left: 500px;
+    top: 125px;
+    background-color: #FFFFFF;
+    border: 1px solid #dff0d8;
+}
+
+.top{
+    height:60px;
+    border-bottom:1px solid #dff0d8;
+}
+
+.top>p{
+    text-align: center;
+    padding-top: 15px;
+    /*margin: 20px 0;*/
+    font-size: 25px;
+    color: #f57421;
+}
+
+.middle{
+    position: relative;
+    height: 290px;
+    margin: 10px 0;
+    /*background-color: red;*/
+    border-bottom:1px solid #dff0d8;
+}
+
+.middle>form>input{
+    height: 40px;
+    width: 290px;
+    margin: 20px 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.middle>form>input:last-child{
+    background-color: #f57421;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.middle>form>input:last-child:hover{
+    background-color: #f57421;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.middle>form>.s1{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 40px;
+    background: url("../images/J1.PNG") no-repeat;
+}
+
+.middle>form>.s2{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 120px;
+    background: url("../images/J2.PNG") no-repeat;
+}
+
+.middle>form>.erro{
+    color: red;
+    font-size: 14px;
+    margin-left:10px;
+}
+
+
+
+.middle1{
+    position: relative;
+    height: 290px;
+    margin: 10px 0;
+    /*background-color: red;*/
+    border-bottom:1px solid #dff0d8;
+}
+
+.middle1>form>input{
+    height: 40px;
+    width: 290px;
+    margin: 20px 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.middle1>form>input:last-child{
+    background-color: #f57421;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.middle1>form>input:last-child:hover{
+    background-color: #f57421;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.middle1>form>.s1{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 40px;
+}
+
+.middle1>form>.s2{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 120px;
+}
+
+.middle1>form>.erro{
+    color: red;
+    font-size: 14px;
+    margin-left:10px;
+}
+
+
+
+
+
+.middle3{
+    position: relative;
+    height: 290px;
+    margin: 10px 0;
+    /*background-color: red;*/
+   /* border-bottom:1px solid #dff0d8;*/
+}
+
+.middle3>form>input{
+    height: 40px;
+    width: 290px;
+    margin: 20px 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.middle3>form>input:last-child{
+    background-color: #f57421;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.middle3>form>input:last-child:hover{
+    background-color: #f57421;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.middle3>form>.s1{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 40px;
+}
+
+.middle3>form>.s2{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 35px;
+    top: 120px;
+}
+
+.middle3>form>.erro{
+    color: red;
+    font-size: 14px;
+    margin-left:10px;
+}
+
+.tail>a{
+    float: right;
+    font-size: 12px;
+    padding: 10px;
+    text-decoration:none;
+    color: black;
+}
+
+.tail>a:hover{
+    color: red;
+}
+
+.middle>form>.iputs:hover{
+    border:1px solid red;
+}
+
+.footer{
+    margin-top: 20px;
+}
+.footer>span{
+    font-size: 15px;
+    position: relative;
+    left: 45%;
+}

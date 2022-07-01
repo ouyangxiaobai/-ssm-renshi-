@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.NoticeDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Notice">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        content,
+        ptime
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getNoticeList" parameterType="Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from notice
+    ORDER BY id asc
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id) from notice
+  </select>
+
+
+  <!--添加-->
+  <insert id="addNotice" parameterType="com.mty.cc.po.Notice" keyProperty="id" useGeneratedKeys="true">
+    insert into notice (
+    id,
+    content,
+    ptime
+  )values(
+        #{id},
+        #{content},
+        #{ptime}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteNotice" >
+        delete from notice where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findNoticeById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from notice where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateNotice" parameterType="com.mty.cc.po.Notice">
+    update notice
+    <set>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from notice
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from notice
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="content != null and content != '' ">
+        and content = #{content}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+    <if test="sw == '01' ">
+        order by ptime desc limit 1
+    </if>
+   </select>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.PositionDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Position">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="did" jdbcType="VARCHAR" property="did" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        did,
+        remark
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getPositionList" parameterType="Integer" resultType="com.mty.cc.po.Position">
+    select
+    p.id,
+    p.name,
+    p.did,
+    p.remark,
+    d.name dname
+    from position p left join department d on p.did = d.id
+      where 1=1
+      <if test="name != null and name != '' ">
+          and p.name like concat('%',#{name},'%')
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id)
+     from position
+      where 1=1
+      <if test="name != null and name != '' ">
+          and name like concat('%',#{name},'%')
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addPosition" parameterType="com.mty.cc.po.Position" keyProperty="id" useGeneratedKeys="true">
+    insert into position (
+    id,
+    name,
+    did,
+    remark
+  )values(
+        #{id},
+        #{name},
+        #{did},
+        #{remark}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deletePosition" >
+        delete from position where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findPositionById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from position where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updatePosition" parameterType="com.mty.cc.po.Position">
+    update position
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="did != null">
+        did = #{did},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from position
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from position
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="name != null and name != '' ">
+        and name = #{name}
+    </if>
+    <if test="did != null and did != '' ">
+        and did = #{did}
+    </if>
+    <if test="remark != null and remark != '' ">
+        and remark = #{remark}
+    </if>
+   </select>
+</mapper>

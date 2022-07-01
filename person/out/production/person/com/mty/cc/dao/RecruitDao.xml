@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.RecruitDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Recruit">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="post" jdbcType="VARCHAR" property="post" />
+        <result column="demand" jdbcType="VARCHAR" property="demand" />
+        <result column="enterprise" jdbcType="VARCHAR" property="enterprise" />
+        <result column="num" jdbcType="VARCHAR" property="num" />
+        <result column="money" jdbcType="VARCHAR" property="money" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        post,
+        demand,
+        enterprise,
+        num,
+        money,
+        ptime
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getRecruitList" parameterType="Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from recruit
+    ORDER BY id asc
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(id) from recruit
+  </select>
+
+
+  <!--添加-->
+  <insert id="addRecruit" parameterType="com.mty.cc.po.Recruit" keyProperty="id" useGeneratedKeys="true">
+    insert into recruit (
+    id,
+    post,
+    demand,
+    enterprise,
+    num,
+    money,
+    ptime
+  )values(
+        #{id},
+        #{post},
+        #{demand},
+        #{enterprise},
+        #{num},
+        #{money},
+        #{ptime}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteRecruit" >
+        delete from recruit where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findRecruitById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from recruit where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateRecruit" parameterType="com.mty.cc.po.Recruit">
+    update recruit
+    <set>
+      <if test="post != null">
+        post = #{post},
+      </if>
+      <if test="demand != null">
+        demand = #{demand},
+      </if>
+      <if test="enterprise != null">
+        enterprise = #{enterprise},
+      </if>
+      <if test="num != null">
+        num = #{num},
+      </if>
+      <if test="money != null">
+        money = #{money},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from recruit
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from recruit
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="post != null and post != '' ">
+        and post = #{post}
+    </if>
+    <if test="demand != null and demand != '' ">
+        and demand = #{demand}
+    </if>
+    <if test="enterprise != null and enterprise != '' ">
+        and enterprise = #{enterprise}
+    </if>
+    <if test="num != null and num != '' ">
+        and num = #{num}
+    </if>
+    <if test="money != null and money != '' ">
+        and money = #{money}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+   </select>
+</mapper>

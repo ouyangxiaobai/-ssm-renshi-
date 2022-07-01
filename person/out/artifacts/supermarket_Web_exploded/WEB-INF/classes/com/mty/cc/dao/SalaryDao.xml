@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.SalaryDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Salary">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="month" jdbcType="VARCHAR" property="month" />
+        <result column="money" jdbcType="VARCHAR" property="money" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        uid,
+        month,
+        money,
+        ptime
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getSalaryList" parameterType="Integer" resultType="com.mty.cc.po.Salary">
+    select
+      s.id,
+      s.uid,
+      s.month,
+      s.money,
+      s.ptime,
+      u.username uname
+    from salary s left join user u on s.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and s.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    ORDER BY s.ptime desc
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(*)
+      from salary s left join user u on s.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and s.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addSalary" parameterType="com.mty.cc.po.Salary" keyProperty="id" useGeneratedKeys="true">
+    insert into salary (
+    id,
+    uid,
+    month,
+    money,
+    ptime
+  )values(
+        #{id},
+        #{uid},
+        #{month},
+        #{money},
+        #{ptime}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteSalary" >
+        delete from salary where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findSalaryById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from salary where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateSalary" parameterType="com.mty.cc.po.Salary">
+    update salary
+    <set>
+      <if test="uid != null">
+        uid = #{uid},
+      </if>
+      <if test="month != null">
+        month = #{month},
+      </if>
+      <if test="money != null">
+        money = #{money},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from salary
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from salary
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="uid != null and uid != '' ">
+        and uid = #{uid}
+    </if>
+    <if test="month != null and month != '' ">
+        and month = #{month}
+    </if>
+    <if test="money != null and money != '' ">
+        and money = #{money}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+   </select>
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.ClockDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Clock">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+        <result column="qtime" jdbcType="VARCHAR" property="qtime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        uid,
+        ptime,
+        qtime
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getClockList" parameterType="Integer" resultType="com.mty.cc.po.Clock">
+    select
+    c.id,
+    c.uid,
+    c.ptime,
+    c.qtime,
+    u.username uname
+    from clock c left join user u on c.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and c.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    ORDER BY c.ptime desc
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(*)
+      from clock c left join user u on c.uid = u.id
+      where 1=1
+      <if test="uid != null and uid != '' ">
+          and c.uid = #{uid}
+      </if>
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addClock" parameterType="com.mty.cc.po.Clock" keyProperty="id" useGeneratedKeys="true">
+    insert into clock (
+    id,
+    uid,
+    ptime,
+    qtime
+  )values(
+        #{id},
+        #{uid},
+        #{ptime},
+        #{qtime}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteClock" >
+        delete from clock where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findClockById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from clock where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateClock" parameterType="com.mty.cc.po.Clock">
+    update clock
+    <set>
+      <if test="uid != null">
+        uid = #{uid},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+      <if test="qtime != null">
+          qtime = #{qtime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from clock
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from clock
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="uid != null and uid != '' ">
+        and uid = #{uid}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+    <if test="qtime != null and qtime != '' ">
+        and qtime = #{qtime}
+    </if>
+      <if test="time != null and time != '' ">
+         and substr(ptime,1,10) = #{time}
+      </if>
+   </select>
+</mapper>

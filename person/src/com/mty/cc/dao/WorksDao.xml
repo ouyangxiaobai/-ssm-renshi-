@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.WorksDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Works">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="wtime" jdbcType="VARCHAR" property="wtime" />
+        <result column="day" jdbcType="VARCHAR" property="day" />
+        <result column="money" jdbcType="VARCHAR" property="money" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        uid,
+        wtime,
+        day,
+        money
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getWorksList" parameterType="Integer" resultType="com.mty.cc.po.Works">
+    select
+    w.id,
+    w.uid,
+    w.wtime,
+    w.day,
+    w.money,
+    u.username uname
+    from works w left join user u on w.uid = u.id
+      where 1=1
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(*)
+      from works w left join user u on w.uid = u.id
+      where 1=1
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addWorks" parameterType="com.mty.cc.po.Works" keyProperty="id" useGeneratedKeys="true">
+    insert into works (
+    id,
+    uid,
+    wtime,
+    day,
+    money
+  )values(
+        #{id},
+        #{uid},
+        #{wtime},
+        #{day},
+        #{money}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteWorks" >
+        delete from works where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findWorksById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from works where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateWorks" parameterType="com.mty.cc.po.Works">
+    update works
+    <set>
+      <if test="uid != null">
+        uid = #{uid},
+      </if>
+      <if test="wtime != null">
+        wtime = #{wtime},
+      </if>
+      <if test="day != null">
+        day = #{day},
+      </if>
+      <if test="money != null">
+        money = #{money},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from works
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from works
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="uid != null and uid != '' ">
+        and uid = #{uid}
+    </if>
+    <if test="wtime != null and wtime != '' ">
+        and wtime = #{wtime}
+    </if>
+    <if test="day != null and day != '' ">
+        and day = #{day}
+    </if>
+    <if test="money != null and money != '' ">
+        and money = #{money}
+    </if>
+   </select>
+</mapper>

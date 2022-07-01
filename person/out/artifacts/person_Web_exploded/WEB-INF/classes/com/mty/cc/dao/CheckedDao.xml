@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mty.cc.dao.CheckedDao" >
+
+    <resultMap id="BaseResultMap" type="com.mty.cc.po.Checked">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="uid" jdbcType="VARCHAR" property="uid" />
+        <result column="lnum" jdbcType="VARCHAR" property="lnum" />
+        <result column="wnum" jdbcType="VARCHAR" property="wnum" />
+        <result column="ptime" jdbcType="VARCHAR" property="ptime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        uid,
+        lnum,
+        wnum,
+        ptime
+    </sql>
+
+
+  <!--分页查询-->
+  <select id="getCheckedList" parameterType="Integer" resultType="com.mty.cc.po.Checked">
+    select
+    c.id,
+    c.uid,
+    c.lnum,
+    c.wnum,
+    c.ptime,
+    u.username uname
+    from checked c left join user u on c.uid = u.id
+      where 1=1
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+    limit #{currentPage},#{pageSize}
+  </select>
+
+
+  <!--查询总数-->
+  <select id="totalCount"  resultType="Integer">
+    select count(*)
+      from checked c left join user u on c.uid = u.id
+      where 1=1
+      <if test="username != null and username != '' ">
+          and u.username = #{username}
+      </if>
+  </select>
+
+
+  <!--添加-->
+  <insert id="addChecked" parameterType="com.mty.cc.po.Checked" keyProperty="id" useGeneratedKeys="true">
+    insert into checked (
+    id,
+    uid,
+    lnum,
+    wnum,
+    ptime
+  )values(
+        #{id},
+        #{uid},
+        #{lnum},
+        #{wnum},
+        #{ptime}
+  )
+  </insert>
+
+
+  <!--根据id删除-->
+  <delete id="deleteChecked" >
+        delete from checked where id=#{id}
+  </delete>
+
+
+  <!--根据ID查询-->
+  <select id="findCheckedById" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from checked where id=#{id}
+  </select>
+
+
+  <!--修改-->
+  <update id="updateChecked" parameterType="com.mty.cc.po.Checked">
+    update checked
+    <set>
+      <if test="uid != null">
+        uid = #{uid},
+      </if>
+      <if test="lnum != null">
+        lnum = #{lnum},
+      </if>
+      <if test="wnum != null">
+        wnum = #{wnum},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+  <!--查询全部-->
+  <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from checked
+  </select>
+
+  <!--查询全部-->
+  <select id="queryFilter" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List" />
+    from checked
+    where 1=1
+    <if test="id != null and id != '' ">
+        and id = #{id}
+    </if>
+    <if test="uid != null and uid != '' ">
+        and uid = #{uid}
+    </if>
+    <if test="lnum != null and lnum != '' ">
+        and lnum = #{lnum}
+    </if>
+    <if test="wnum != null and wnum != '' ">
+        and wnum = #{wnum}
+    </if>
+    <if test="ptime != null and ptime != '' ">
+        and ptime = #{ptime}
+    </if>
+   </select>
+</mapper>

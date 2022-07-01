@@ -1,0 +1,6 @@
+|-app（应用层）
+  |--controller【控制层】
+  |--service【事务层】（接口）
+     |--impl（接口实现）
+  |--interceptor
+  |--validator
